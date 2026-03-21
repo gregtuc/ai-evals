@@ -1,0 +1,167 @@
+category: general_knowledge
+tasks:
+  # --- EASY ---
+  - id: gk_001
+    name: "Neuroscience - hippocampus"
+    prompt: |
+      Which brain region is primarily responsible for forming new long-term memories?
+      Answer with just the name of the region.
+    scorer:
+      type: contains
+      expected: ["hippocampus"]
+    metadata: { difficulty: easy }
+
+  - id: gk_002
+    name: "Biology - DNA base pairs"
+    prompt: |
+      In DNA, adenine pairs with which nucleotide base?
+      Answer with just the name.
+    scorer:
+      type: contains
+      expected: ["thymine"]
+    metadata: { difficulty: easy }
+
+  # --- MEDIUM ---
+  - id: gk_003
+    name: "Neuroscience - split brain"
+    prompt: |
+      In split-brain patients (corpus callosum severed), if an object is shown
+      only to the left visual field, which hemisphere processes it, and can
+      the patient verbally name the object? Answer in the format:
+      "Hemisphere: [left/right], Can name: [yes/no]"
+    scorer:
+      type: contains
+      expected: ["right", "no"]
+    metadata: { difficulty: medium }
+
+  - id: gk_004
+    name: "Evolution - convergent vs divergent"
+    prompt: |
+      The wings of bats and the wings of birds are an example of what
+      evolutionary concept — convergent evolution or divergent evolution?
+      Answer with just the term.
+    scorer:
+      type: contains
+      expected: ["convergent"]
+    metadata: { difficulty: medium }
+
+  - id: gk_005
+    name: "Physics - twin paradox"
+    prompt: |
+      In the twin paradox of special relativity, one twin travels at near
+      light speed and returns. Which twin is younger upon reunion — the
+      traveling twin or the stay-at-home twin? Answer in one sentence.
+    scorer:
+      type: contains
+      expected: ["travel"]
+    metadata: { difficulty: medium }
+
+  - id: gk_006
+    name: "Computer science - halting problem"
+    prompt: |
+      Is it possible to write a general algorithm that can determine whether
+      any arbitrary program will eventually halt or run forever?
+      Answer YES or NO, then name the person who proved this.
+    scorer:
+      type: contains
+      expected: ["NO", "Turing"]
+    metadata: { difficulty: medium }
+
+  # --- HARD ---
+  - id: gk_007
+    name: "Neuroscience - Hebbian learning"
+    prompt: |
+      "Neurons that fire together wire together" summarizes which learning rule?
+      Name the rule AND explain its relationship to long-term potentiation (LTP)
+      in one sentence.
+    scorer:
+      type: contains
+      expected: ["Hebb"]
+    metadata: { difficulty: medium }
+
+  - id: gk_008
+    name: "Cognitive science - embodied cognition"
+    prompt: |
+      The embodied cognition thesis challenges the traditional computational
+      theory of mind. State the core claim of embodied cognition and name one
+      experiment or finding that supports it. Answer in 3 sentences.
+    scorer:
+      type: contains
+      expected: ["body", "cognit"]
+    metadata: { difficulty: hard }
+
+  - id: gk_009
+    name: "Evolution - Baldwin effect"
+    prompt: |
+      Explain the Baldwin effect in evolutionary biology. How does learned
+      behavior influence genetic evolution without invoking Lamarckian
+      inheritance? Answer in 3 sentences.
+    scorer:
+      type: contains
+      expected: ["learn", "selection"]
+    metadata: { difficulty: hard }
+
+  - id: gk_010
+    name: "Physics - measurement problem"
+    prompt: |
+      In quantum mechanics, describe the measurement problem and explain how
+      the Copenhagen interpretation and the many-worlds interpretation each
+      resolve it differently. Answer in 4 sentences or fewer.
+    scorer:
+      type: contains
+      expected: ["collapse", "branch"]
+    metadata: { difficulty: hard }
+
+  - id: gk_011
+    name: "Mathematics - Gödel's incompleteness"
+    prompt: |
+      State Gödel's first incompleteness theorem precisely. Then explain
+      what it means for a system to be "consistent but incomplete."
+      Answer in 3 sentences.
+    scorer:
+      type: contains
+      expected: ["consistent", "unprovable"]
+    metadata: { difficulty: hard }
+
+  - id: gk_012
+    name: "Neuroscience - predictive processing"
+    prompt: |
+      Explain the predictive processing (or predictive coding) framework
+      of brain function. What role do prediction errors play, and how does
+      this framework relate to perception being a "controlled hallucination"?
+      Answer in 3 sentences.
+    scorer:
+      type: contains
+      expected: ["prediction", "error"]
+    metadata: { difficulty: hard }
+
+  - id: gk_013
+    name: "Information theory - entropy"
+    prompt: |
+      A fair 8-sided die is rolled. What is the Shannon entropy of the
+      outcome in bits? Give just the number.
+    scorer:
+      type: exact_match
+      expected: "3"
+    metadata: { difficulty: medium }
+
+  - id: gk_014
+    name: "Philosophy of mind - Chinese room"
+    prompt: |
+      Describe Searle's Chinese Room argument. What specific claim about
+      AI does it argue against? Name the view it targets. Answer in 3 sentences.
+    scorer:
+      type: contains
+      expected: ["strong AI", "understand"]
+    metadata: { difficulty: medium }
+
+  - id: gk_015
+    name: "Complexity theory - P vs NP"
+    prompt: |
+      Explain the difference between P and NP complexity classes.
+      Give one example of a problem believed to be in NP but not in P.
+      Is the traveling salesman decision problem in NP? Answer YES or NO at the end.
+    scorer:
+      type: contains
+      expected: ["YES"]
+    metadata: { difficulty: medium }

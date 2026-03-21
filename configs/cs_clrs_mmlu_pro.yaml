@@ -1,0 +1,26 @@
+name: "cs-clrs-mmlu-pro"
+description: |
+  Test whether priming with "Introduction to Algorithms" (CLRS) produces
+  domain-specific improvement on MMLU-Pro. Computer science and math questions
+  are domain-matched; all other categories serve as negative controls.
+
+models:
+  - provider: anthropic
+    model: claude-sonnet-4-20250514
+
+book:
+  title: "Introduction to Algorithms"
+  author: "Thomas H. Cormen, Charles E. Leiserson, Ronald L. Rivest, and Clifford Stein"
+  description: "The canonical algorithms and data structures textbook (CLRS)"
+
+benchmark:
+  name: mmlu_pro
+  domain_matched:
+    - computer science
+    - math
+  sample_per_category: 50
+
+runs_per_task: 3
+temperature: 0.3
+seed: 42
+max_tokens: 1024

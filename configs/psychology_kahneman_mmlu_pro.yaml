@@ -1,0 +1,26 @@
+name: "psychology-kahneman-mmlu-pro"
+description: |
+  Test whether priming with "Thinking, Fast and Slow" produces domain-specific
+  improvement on MMLU-Pro. Psychology and philosophy questions are domain-matched;
+  all other categories serve as negative controls.
+
+models:
+  - provider: anthropic
+    model: claude-sonnet-4-20250514
+
+book:
+  title: "Thinking, Fast and Slow"
+  author: "Daniel Kahneman"
+  description: "Cognitive biases, heuristics, and dual-process theory of reasoning"
+
+benchmark:
+  name: mmlu_pro
+  domain_matched:
+    - psychology
+    - philosophy
+  sample_per_category: 50
+
+runs_per_task: 3
+temperature: 0.3
+seed: 42
+max_tokens: 1024

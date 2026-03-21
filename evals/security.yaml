@@ -1,0 +1,250 @@
+category: security
+tasks:
+  # --- EASY ---
+  - id: security_001
+    name: "Identify SQL injection"
+    prompt: |
+      Is the following Python code vulnerable to SQL injection? Answer YES or NO, then explain briefly.
+
+      ```python
+      def get_user(username):
+          query = f"SELECT * FROM users WHERE username = '{username}'"
+          cursor.execute(query)
+          return cursor.fetchone()
+      ```
+    scorer:
+      type: exact_match
+      expected: "YES"
+    metadata: { difficulty: easy }
+
+  - id: security_002
+    name: "Password hashing"
+    prompt: |
+      Which of the following is the BEST approach for storing passwords in a database?
+      A) Store the password in plaintext
+      B) Store an MD5 hash of the password
+      C) Store a SHA-256 hash of the password
+      D) Store a bcrypt hash of the password with a unique salt
+      Answer with just the letter.
+    scorer:
+      type: exact_match
+      expected: "D"
+    metadata: { difficulty: easy }
+
+  # --- MEDIUM ---
+  - id: security_003
+    name: "Identify XSS vulnerability"
+    prompt: |
+      Is this Flask/Jinja2 template code vulnerable to XSS? Answer YES or NO.
+
+      ```html
+      <p>Welcome, {{ username | safe }}!</p>
+      ```
+    scorer:
+      type: exact_match
+      expected: "YES"
+    metadata: { difficulty: medium }
+
+  - id: security_004
+    name: "CORS misconfiguration"
+    prompt: |
+      A web API has the following CORS configuration:
+      Access-Control-Allow-Origin: *
+      Access-Control-Allow-Credentials: true
+
+      Is this configuration secure? Answer YES or NO, then explain in one sentence.
+    scorer:
+      type: exact_match
+      expected: "NO"
+    metadata: { difficulty: medium }
+
+  - id: security_005
+    name: "SSRF identification"
+    prompt: |
+      What type of vulnerability is present in this code? Give the abbreviation.
+
+      ```python
+      @app.route('/fetch')
+      def fetch_url():
+          url = request.args.get('url')
+          response = requests.get(url)
+          return response.text
+      ```
+    scorer:
+      type: exact_match
+      expected: "SSRF"
+    metadata: { difficulty: medium }
+
+  - id: security_006
+    name: "JWT algorithm confusion"
+    prompt: |
+      A web application validates JWTs by reading the algorithm from the
+      JWT header and using it to verify the signature. The application
+      has an RSA public key for verification. Describe specifically how
+      an attacker could forge a valid JWT. Answer in 3 sentences or fewer.
+    scorer:
+      type: contains
+      expected: ["none", "hmac"]
+    metadata: { difficulty: medium }
+
+  # --- HARD ---
+  - id: security_007
+    name: "Race condition in auth"
+    prompt: |
+      ```python
+      @app.route('/transfer', methods=['POST'])
+      def transfer():
+          amount = int(request.form['amount'])
+          sender = get_user(session['user_id'])
+          if sender.balance >= amount:
+              sender.balance -= amount
+              recipient = get_user(request.form['recipient_id'])
+              recipient.balance += amount
+              db.session.commit()
+              return "Transfer complete"
+          return "Insufficient funds"
+      ```
+
+      This code has a vulnerability beyond just SQL injection or auth issues.
+      What class of vulnerability is it, and how would an attacker exploit it?
+      Name the vulnerability class in your first sentence.
+    scorer:
+      type: contains
+      expected: ["race", "condition"]
+    metadata: { difficulty: hard }
+
+  - id: security_008
+    name: "Prototype pollution"
+    prompt: |
+      ```javascript
+      function merge(target, source) {
+          for (let key in source) {
+              if (typeof source[key] === 'object') {
+                  if (!target[key]) target[key] = {};
+                  merge(target[key], source[key]);
+              } else {
+                  target[key] = source[key];
+              }
+          }
+      }
+
+      app.post('/config', (req, res) => {
+          merge(appConfig, req.body);
+          res.json({ status: 'ok' });
+      });
+      ```
+
+      What vulnerability does this code have? What specific payload would an
+      attacker send to exploit it? Show the JSON payload.
+    scorer:
+      type: contains
+      expected: ["__proto__"]
+    metadata: { difficulty: hard }
+
+  - id: security_009
+    name: "Timing attack on comparison"
+    prompt: |
+      ```python
+      def verify_api_key(provided_key, stored_key):
+          if len(provided_key) != len(stored_key):
+              return False
+          for a, b in zip(provided_key, stored_key):
+              if a != b:
+                  return False
+          return True
+      ```
+
+      This comparison function has a subtle security vulnerability.
+      Name the attack class, explain why this code is vulnerable,
+      and show how to fix it in one line of Python.
+    scorer:
+      type: contains
+      expected: ["timing"]
+    metadata: { difficulty: hard }
+
+  - id: security_010
+    name: "Deserialization gadget chain"
+    prompt: |
+      In Java deserialization attacks, explain what a "gadget chain" is and why
+      merely removing user-facing deserialization endpoints is not sufficient
+      to prevent attacks. Name one well-known gadget chain library.
+      Answer in 3 sentences.
+    scorer:
+      type: contains
+      expected: ["gadget", "Commons"]
+    metadata: { difficulty: hard }
+
+  - id: security_011
+    name: "CSP bypass analysis"
+    prompt: |
+      A website has this Content-Security-Policy header:
+      ```
+      Content-Security-Policy: script-src 'self' https://cdn.jsdelivr.net;
+      ```
+
+      Is this CSP bypassable for XSS? Answer YES or NO.
+      If YES, explain the technique in one sentence.
+    scorer:
+      type: exact_match
+      expected: "YES"
+    metadata: { difficulty: hard }
+
+  - id: security_012
+    name: "OAuth redirect vulnerability"
+    prompt: |
+      An OAuth2 implementation validates redirect URIs using this check:
+      ```python
+      def is_valid_redirect(uri):
+          return uri.startswith("https://app.example.com/callback")
+      ```
+
+      Is this validation secure? Answer YES or NO.
+      If NO, give a specific malicious URI that would bypass it.
+    scorer:
+      type: exact_match
+      expected: "NO"
+    metadata: { difficulty: hard }
+
+  - id: security_013
+    name: "Memory safety in C"
+    prompt: |
+      ```c
+      char* get_greeting(char* name) {
+          char buffer[64];
+          sprintf(buffer, "Hello, %s! Welcome.", name);
+          return buffer;
+      }
+      ```
+
+      This C code has two distinct bugs. Name both of them.
+    scorer:
+      type: contains
+      expected: ["buffer overflow", "stack"]
+    metadata: { difficulty: medium }
+
+  - id: security_014
+    name: "DNS rebinding attack"
+    prompt: |
+      Explain how a DNS rebinding attack can bypass same-origin policy
+      to access internal network services. Include the role of TTL
+      in the attack. Answer in 3 sentences.
+    scorer:
+      type: contains
+      expected: ["TTL", "internal"]
+    metadata: { difficulty: hard }
+
+  - id: security_015
+    name: "Insecure randomness"
+    prompt: |
+      A web application generates password reset tokens like this:
+      ```python
+      import random
+      token = ''.join(random.choices('abcdefghijklmnopqrstuvwxyz0123456789', k=32))
+      ```
+
+      Is this secure? Answer YES or NO. If NO, name the specific Python
+      module/function that should be used instead.
+    scorer:
+      type: contains
+      expected: ["NO", "secrets"]
+    metadata: { difficulty: medium }

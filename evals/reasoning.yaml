@@ -1,0 +1,191 @@
+category: reasoning
+tasks:
+  # --- EASY (baseline calibration) ---
+  - id: reasoning_001
+    name: "Syllogistic deduction"
+    prompt: |
+      All cats are mammals. All mammals are warm-blooded.
+      Is the following statement necessarily true? "All cats are warm-blooded."
+      Answer with exactly: TRUE or FALSE
+    scorer:
+      type: exact_match
+      expected: "TRUE"
+    metadata: { difficulty: easy }
+
+  - id: reasoning_002
+    name: "Modus tollens"
+    prompt: |
+      If it is raining, the ground is wet. The ground is not wet.
+      What can we conclude? Answer in one sentence.
+    scorer:
+      type: contains
+      expected: ["not raining"]
+    metadata: { difficulty: easy }
+
+  # --- MEDIUM ---
+  - id: reasoning_003
+    name: "Counterfactual causal chain"
+    prompt: |
+      In a world where water freezes at 50°C instead of 0°C, would the oceans
+      at the Earth's equator (where average water temperature is about 25°C) be
+      liquid or frozen? Answer with one word: LIQUID or FROZEN
+    scorer:
+      type: exact_match
+      expected: "FROZEN"
+    metadata: { difficulty: medium }
+
+  - id: reasoning_004
+    name: "Monty Hall problem"
+    prompt: |
+      You're on a game show with 3 doors. Behind one is a car, behind the others
+      are goats. You pick door 1. The host, who knows what's behind each door,
+      opens door 3 to reveal a goat. Should you switch to door 2 or stick with
+      door 1 to maximize your chance of winning the car?
+      Answer with one word: SWITCH or STICK
+    scorer:
+      type: exact_match
+      expected: "SWITCH"
+    metadata: { difficulty: medium }
+
+  - id: reasoning_005
+    name: "Base rate neglect"
+    prompt: |
+      A disease affects 1 in 1000 people. A test for the disease has a 5% false
+      positive rate and never misses a true case. If a randomly selected person
+      tests positive, what is the approximate probability they actually have the
+      disease? Express as a percentage rounded to the nearest whole number.
+      Give just the number followed by %.
+    scorer:
+      type: contains
+      expected: ["2%"]
+    metadata: { difficulty: medium }
+
+  - id: reasoning_006
+    name: "Wason selection task"
+    prompt: |
+      You have four cards showing: A, K, 4, 7.
+      Each card has a letter on one side and a number on the other.
+      Rule: "If a card has a vowel on one side, then it has an even number on the other side."
+      Which cards MUST you flip to test whether the rule is being violated?
+      List only the cards you must flip, separated by commas.
+    scorer:
+      type: contains
+      expected: ["A", "7"]
+    metadata: { difficulty: medium }
+
+  # --- HARD (where we expect to see signal) ---
+  - id: reasoning_007
+    name: "Knights and knaves (3 speakers)"
+    prompt: |
+      On an island, knights always tell the truth and knaves always lie.
+      You meet three people: A, B, and C.
+      A says: "B is a knave."
+      B says: "A and C are the same type (both knights or both knaves)."
+      C says: "A is a knight."
+      For each person, state whether they are a knight or knave.
+      Format: A=knight/knave, B=knight/knave, C=knight/knave
+    scorer:
+      type: contains
+      expected: ["A=knight", "B=knave", "C=knight"]
+    metadata: { difficulty: hard }
+
+  - id: reasoning_008
+    name: "River crossing (wolf, goat, cabbage)"
+    prompt: |
+      A farmer needs to cross a river with a wolf, a goat, and a cabbage.
+      The boat can only carry the farmer and one item. If left alone together,
+      the wolf will eat the goat, and the goat will eat the cabbage.
+      List the minimum number of one-way crossings needed and describe each
+      crossing. Count only one-way trips (going across OR coming back each count as 1).
+      State the total count as "Total: N crossings" at the end.
+    scorer:
+      type: contains
+      expected: ["Total: 7"]
+    metadata: { difficulty: hard }
+
+  - id: reasoning_009
+    name: "Probabilistic paradox (boy or girl)"
+    prompt: |
+      A family has two children. You learn that at least one of them is a boy
+      who was born on a Tuesday. What is the probability that both children
+      are boys? Express as a fraction in lowest terms. Give only the fraction.
+    scorer:
+      type: contains
+      expected: ["13/27"]
+    metadata: { difficulty: hard }
+
+  - id: reasoning_010
+    name: "Cognitive reflection test (bat and ball)"
+    prompt: |
+      A bat and a ball cost $1.10 in total. The bat costs $1.00 more than the ball.
+      How much does the ball cost? Give the answer in dollars and cents.
+    scorer:
+      type: contains
+      expected: ["0.05"]
+    metadata: { difficulty: medium }
+
+  - id: reasoning_011
+    name: "Survivor bias identification"
+    prompt: |
+      During WWII, the military analyzed bullet holes in returning bombers and
+      considered adding armor to the most-hit areas. Statistician Abraham Wald
+      disagreed. Where did Wald recommend adding armor, and why?
+      Answer in 2 sentences.
+    scorer:
+      type: contains
+      expected: ["no", "holes"]
+    metadata: { difficulty: medium }
+
+  - id: reasoning_012
+    name: "Multi-step constraint satisfaction"
+    prompt: |
+      Five houses in a row are painted different colors: red, green, white, yellow, blue.
+      - The red house is immediately to the right of the green house.
+      - The blue house is at one of the ends.
+      - The white house is somewhere to the left of the yellow house.
+      - The yellow house is not adjacent to the blue house.
+      What is the order of house colors from left to right?
+      Format: color, color, color, color, color
+    scorer:
+      type: contains
+      expected: ["blue", "white", "green", "red", "yellow"]
+    metadata: { difficulty: hard }
+
+  - id: reasoning_013
+    name: "Simpson's paradox"
+    prompt: |
+      Hospital A has a 90% surgery success rate. Hospital B has an 85% success rate.
+      However, Hospital A takes mostly easy cases (95% success on easy, 70% on hard)
+      while Hospital B takes mostly hard cases (90% success on easy, 82% on hard).
+      If you need a hard surgery, which hospital should you choose: A or B?
+      Answer with just the letter.
+    scorer:
+      type: exact_match
+      expected: "B"
+    metadata: { difficulty: hard }
+
+  - id: reasoning_014
+    name: "Second-order false belief"
+    prompt: |
+      Sally puts a marble in her basket and leaves the room. Anne moves the
+      marble to her box. Sally returns. Then, before Sally opens her basket,
+      Bob enters. Bob saw Anne move the marble but doesn't know that Sally
+      didn't see it happen. Where does BOB think SALLY will look for the marble?
+      Answer with one word: BASKET or BOX
+    scorer:
+      type: exact_match
+      expected: "BASKET"
+    metadata: { difficulty: hard }
+
+  - id: reasoning_015
+    name: "Logical quantifier scope"
+    prompt: |
+      Consider these two statements:
+      1) "Every student passed some exam."
+      2) "Some exam was passed by every student."
+      Do these two statements mean the same thing? Answer YES or NO,
+      then explain the difference in one sentence.
+    scorer:
+      type: exact_match
+      expected: "NO"
+    metadata: { difficulty: medium }

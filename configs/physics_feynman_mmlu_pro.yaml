@@ -1,0 +1,27 @@
+name: "physics-feynman-mmlu-pro"
+description: |
+  Test whether priming with "The Feynman Lectures on Physics" produces
+  domain-specific improvement on MMLU-Pro. Physics and engineering questions
+  are domain-matched; all other categories serve as negative controls.
+
+models:
+  - provider: anthropic
+    model: claude-sonnet-4-20250514
+
+book:
+  title: "The Feynman Lectures on Physics"
+  author: "Richard P. Feynman, Robert B. Leighton, Matthew Sands"
+  description: "Classic physics lectures covering mechanics, electromagnetism, and quantum mechanics"
+
+benchmark:
+  name: mmlu_pro
+  domain_matched:
+    - physics
+    - engineering
+    - math
+  sample_per_category: 50
+
+runs_per_task: 3
+temperature: 0.3
+seed: 42
+max_tokens: 1024

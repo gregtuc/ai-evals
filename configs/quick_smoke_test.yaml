@@ -1,0 +1,21 @@
+name: "smoke-test"
+description: "Quick smoke test with MMLU-Pro (5 per category) to verify pipeline"
+
+models:
+  - provider: anthropic
+    model: claude-sonnet-4-20250514
+
+book:
+  title: "Thinking, Fast and Slow"
+  author: "Daniel Kahneman"
+
+benchmark:
+  name: mmlu_pro
+  domain_matched:
+    - psychology
+  sample_per_category: 5
+
+runs_per_task: 1
+temperature: 0.3
+seed: 42
+max_tokens: 1024

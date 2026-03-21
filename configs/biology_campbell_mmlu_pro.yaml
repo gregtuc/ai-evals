@@ -1,0 +1,26 @@
+name: "biology-campbell-mmlu-pro"
+description: |
+  Test whether priming with "Campbell Biology" produces domain-specific
+  improvement on MMLU-Pro. Biology and health questions are domain-matched;
+  all other 12 categories serve as negative controls.
+
+models:
+  - provider: anthropic
+    model: claude-sonnet-4-20250514
+
+book:
+  title: "Campbell Biology"
+  author: "Lisa A. Urry, Michael L. Cain, Steven A. Wasserman"
+  description: "The gold-standard introductory biology textbook"
+
+benchmark:
+  name: mmlu_pro
+  domain_matched:
+    - biology
+    - health
+  sample_per_category: 50  # 50 per category = ~700 tasks total, manageable cost
+
+runs_per_task: 3
+temperature: 0.3
+seed: 42
+max_tokens: 1024

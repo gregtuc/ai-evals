@@ -1,0 +1,18 @@
+name: "smoke-test-local"
+description: "Quick smoke test with local YAML evals (no HuggingFace download needed)"
+
+models:
+  - provider: anthropic
+    model: claude-sonnet-4-20250514
+
+book:
+  title: "Thinking, Fast and Slow"
+  author: "Daniel Kahneman"
+
+eval_categories:
+  - reasoning
+
+runs_per_task: 1
+temperature: 0.3
+seed: 42
+max_tokens: 1024
