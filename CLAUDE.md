@@ -119,7 +119,7 @@ conditions:
     template: "{task_prompt}"
   control:
     role: control
-    template: "Draw on your deep expertise and knowledge in this domain...\n{task_prompt}"
+    template: "Draw on your deep expertise and knowledge in {task_category}...\n{task_prompt}"
   primed:
     role: treatment
     book_vars: true

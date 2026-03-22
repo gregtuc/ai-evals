@@ -15,10 +15,10 @@ Each experiment runs a full academic benchmark (e.g., [MMLU-Pro](https://hugging
 | Condition | Role | Prompt | Purpose |
 |-----------|------|--------|---------|
 | **Baseline** | baseline | Raw question, no framing | Ground truth performance |
-| **Control** | control | "Draw on your expertise in this domain..." | Isolate the effect of elaborate prompting |
+| **Control** | control | "Draw on your expertise in {task_category}..." | Isolate the effect of elaborate prompting |
 | **Primed** | treatment | "Draw on your knowledge from [Book] by [Author]..." | Test book-specific effect |
 
-The control condition is critical — its prompt is structurally parallel to the treatment, differing only in whether it references a specific book or generic domain expertise. Without this, any improvement could be the instruction style, not the book reference.
+The control condition is critical — its prompt is structurally parallel to the treatment, with equal specificity (naming the task category vs. naming a book). Without this, any improvement could be the instruction style or specificity level, not the book reference.
 
 ### Ablation Controls
 
@@ -170,7 +170,7 @@ conditions:
     template: "{task_prompt}"
   control:
     role: control
-    template: "Draw on your deep expertise and knowledge in this domain...\n\n{task_prompt}"
+    template: "Draw on your deep expertise and knowledge in {task_category}...\n\n{task_prompt}"
   primed:
     role: treatment
     book_vars: true
@@ -233,8 +233,8 @@ ai-evals/
 ├── src/ai_evals/
 │   ├── config.py              # Flexible condition system with roles and book overrides
 │   ├── benchmark_loader.py    # HuggingFace dataset → EvalTask (per-category sampling)
-│   ├── runner.py              # Async experiment runner with concurrency + cost estimation
-│   ├── analysis.py            # Role-based pair discovery, power analysis, domain specificity
+│   ├── runner.py              # Async experiment runner with concurrency, cost estimation, multi-seed
+│   ├── analysis.py            # Mixed-effects domain specificity, power analysis, cross-seed replication
 │   ├── results.py             # JSONL storage with resume, condition roles, task metadata
 │   ├── scorers/               # MCQ (last-line priority), exact match, code execution, LLM judge
 │   ├── models/                # Anthropic, OpenAI with sync/async and SDK retry support
