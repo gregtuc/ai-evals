@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Literal
 
 from pydantic import BaseModel, Field
 
@@ -15,7 +14,8 @@ class RunResult(BaseModel):
     task_id: str
     task_category: str
     model: str
-    condition: Literal["baseline", "control", "primed"]
+    condition: str
+    condition_role: str = ""  # "baseline", "control", "treatment"; default for old data compat
     run_number: int
     input_tokens: int
     output_tokens: int
@@ -24,6 +24,7 @@ class RunResult(BaseModel):
     score: float
     score_passed: bool
     scorer_details: dict = Field(default_factory=dict)
+    task_metadata: dict = Field(default_factory=dict)
     timestamp: str  # ISO 8601
     config_hash: str
 

@@ -19,7 +19,7 @@ class ModelResponse:
 
 
 class Model(Protocol):
-    """Provider-agnostic LLM interface."""
+    """Provider-agnostic LLM interface with sync and async support."""
 
     @property
     def name(self) -> str: ...
@@ -28,6 +28,16 @@ class Model(Protocol):
     def max_context_tokens(self) -> int: ...
 
     def complete(
+        self,
+        messages: list[dict[str, str]],
+        *,
+        system: str | None = None,
+        temperature: float = 0.0,
+        max_tokens: int = 4096,
+        seed: int | None = None,
+    ) -> ModelResponse: ...
+
+    async def async_complete(
         self,
         messages: list[dict[str, str]],
         *,

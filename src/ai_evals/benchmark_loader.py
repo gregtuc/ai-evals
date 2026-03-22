@@ -118,55 +118,63 @@ def _load_gpqa_diamond(
     ds = load_dataset("Idavidrein/gpqa", "gpqa_diamond", split="train")
 
     rng = random.Random(seed)
-    tasks = []
 
-    rows = list(ds)
-    if sample_per_category and len(rows) > sample_per_category:
-        rows = rng.sample(rows, sample_per_category)
-
-    for i, row in enumerate(rows):
-        question = row["Question"]
-        correct = row["Correct Answer"]
-        incorrect = [
-            row["Incorrect Answer 1"],
-            row["Incorrect Answer 2"],
-            row["Incorrect Answer 3"],
-        ]
-
-        # Shuffle answers deterministically
-        all_answers = [correct] + incorrect
-        rng_shuffle = random.Random(seed + i)  # unique seed per question
-        rng_shuffle.shuffle(all_answers)
-
-        # Find which letter is the correct answer after shuffling
-        correct_idx = all_answers.index(correct)
-        correct_letter = LETTERS[correct_idx]
-
-        # Format as MCQ
-        options_text = "\n".join(
-            f"{LETTERS[j]}) {ans}" for j, ans in enumerate(all_answers)
-        )
-        prompt = (
-            f"{question}\n\n{options_text}\n\n"
-            f"Answer with just the letter (A, B, C, or D)."
-        )
-
-        # Use subdomain as category if available
+    # Group by subdomain for per-category sampling (matching MMLU-Pro/HLE pattern)
+    by_category: dict[str, list] = {}
+    for row in ds:
         category = row.get("Subdomain", row.get("subdomain", "gpqa_diamond"))
-        # Normalize: some rows have "Organic Chemistry", etc.
         if category:
             category = category.lower().replace(" ", "_")
         else:
             category = "gpqa_diamond"
+        if category not in by_category:
+            by_category[category] = []
+        by_category[category].append(row)
 
-        tasks.append(EvalTask(
-            id=f"gpqa_{i:04d}",
-            category=category,
-            name=question[:80],
-            prompt=prompt,
-            scorer=ScorerConfig(type="mcq", expected=correct_letter),
-            metadata={"benchmark": "gpqa_diamond", "difficulty": "graduate"},
-        ))
+    tasks = []
+    global_idx = 0
+
+    for cat in sorted(by_category.keys()):
+        rows = by_category[cat]
+        if sample_per_category and len(rows) > sample_per_category:
+            rows = rng.sample(rows, sample_per_category)
+
+        for row in rows:
+            question = row["Question"]
+            correct = row["Correct Answer"]
+            incorrect = [
+                row["Incorrect Answer 1"],
+                row["Incorrect Answer 2"],
+                row["Incorrect Answer 3"],
+            ]
+
+            # Shuffle answers deterministically
+            all_answers = [correct] + incorrect
+            rng_shuffle = random.Random(seed + global_idx)  # unique seed per question
+            rng_shuffle.shuffle(all_answers)
+
+            # Find which letter is the correct answer after shuffling
+            correct_idx = all_answers.index(correct)
+            correct_letter = LETTERS[correct_idx]
+
+            # Format as MCQ
+            options_text = "\n".join(
+                f"{LETTERS[j]}) {ans}" for j, ans in enumerate(all_answers)
+            )
+            prompt = (
+                f"{question}\n\n{options_text}\n\n"
+                f"Answer with just the letter (A, B, C, or D)."
+            )
+
+            tasks.append(EvalTask(
+                id=f"gpqa_{cat}_{global_idx:04d}",
+                category=cat,
+                name=question[:80],
+                prompt=prompt,
+                scorer=ScorerConfig(type="mcq", expected=correct_letter),
+                metadata={"benchmark": "gpqa_diamond", "difficulty": "graduate"},
+            ))
+            global_idx += 1
 
     return tasks
 

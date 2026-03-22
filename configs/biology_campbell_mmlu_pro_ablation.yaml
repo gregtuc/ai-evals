@@ -1,0 +1,84 @@
+name: "biology-campbell-mmlu-pro-ablation"
+description: |
+  Full ablation study: test whether priming with "Campbell Biology" produces
+  domain-specific improvement on MMLU-Pro beyond what can be explained by
+  prompt specificity alone.
+
+  Five conditions isolate the book-specific effect:
+  - baseline: bare prompt
+  - control: elaborate "think carefully" framing (no book)
+  - primed: elaborate framing + correct book reference (the treatment)
+  - irrelevant_book: elaborate framing + wrong-domain book (physics)
+  - fake_book: elaborate framing + made-up book and author
+
+  If primed > control ONLY in biology/health, but irrelevant_book and
+  fake_book do NOT show this pattern, the book reference has a real,
+  domain-specific effect.
+
+models:
+  - provider: anthropic
+    model: claude-sonnet-4-20250514
+
+book:
+  title: "Campbell Biology"
+  author: "Lisa A. Urry, Michael L. Cain, Steven A. Wasserman"
+  description: "The gold-standard introductory biology textbook"
+
+conditions:
+  baseline:
+    role: baseline
+    template: "{task_prompt}"
+  control:
+    role: control
+    template: >
+      Before answering, draw on your deep expertise and knowledge
+      in {task_category}. Use the concepts, frameworks, and knowledge
+      you have in this area to inform your answer.
+
+      {task_prompt}
+  primed:
+    role: treatment
+    book_vars: true
+    template: >
+      Before answering, draw on your deep expertise and knowledge
+      from the book "{book_title}" by {book_author}. Use the concepts,
+      frameworks, and knowledge from that book to inform your answer.
+
+      {task_prompt}
+  irrelevant_book:
+    role: treatment
+    book_vars: true
+    book_override:
+      title: "The Feynman Lectures on Physics"
+      author: "Richard P. Feynman"
+    template: >
+      Before answering, draw on your deep expertise and knowledge
+      from the book "{book_title}" by {book_author}. Use the concepts,
+      frameworks, and knowledge from that book to inform your answer.
+
+      {task_prompt}
+  fake_book:
+    role: treatment
+    book_vars: true
+    book_override:
+      title: "Advanced Principles of Cellular Dynamics"
+      author: "Dr. Robert J. Thornfield"
+    template: >
+      Before answering, draw on your deep expertise and knowledge
+      from the book "{book_title}" by {book_author}. Use the concepts,
+      frameworks, and knowledge from that book to inform your answer.
+
+      {task_prompt}
+
+benchmark:
+  name: mmlu_pro
+  domain_matched:
+    - biology
+    - health
+  sample_per_category: 50
+
+runs_per_task: 3
+temperature: 0.3
+seed: 42
+max_tokens: 1024
+concurrency: 10

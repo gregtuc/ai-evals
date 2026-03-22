@@ -11,10 +11,10 @@ def get_model(config: ModelConfig, **kwargs) -> Model:
     if config.provider == "anthropic":
         from ai_evals.models.anthropic import AnthropicModel
 
-        return AnthropicModel(model=config.model, **kwargs)
+        return AnthropicModel(model=config.model, max_retries=config.max_retries, **kwargs)
     elif config.provider == "openai":
         from ai_evals.models.openai import OpenAIModel
 
-        return OpenAIModel(model=config.model, **kwargs)
+        return OpenAIModel(model=config.model, max_retries=config.max_retries, **kwargs)
     else:
         raise ValueError(f"Unknown provider: {config.provider}")

@@ -39,6 +39,12 @@ class MockModel:
             latency_ms=10.0,
         )
 
+    async def async_complete(self, messages, *, system=None, temperature=0.0, max_tokens=4096, seed=None):
+        return self.complete(
+            messages, system=system, temperature=temperature,
+            max_tokens=max_tokens, seed=seed,
+        )
+
 
 @pytest.fixture
 def mock_model():
